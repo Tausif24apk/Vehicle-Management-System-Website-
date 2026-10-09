@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vehicle Rental Management System (VRMS)</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">
+    <span>🚗</span> Vehicle<span> Management System</span>
+  </div>
+  <div class="nav-actions" id="navActions">
+    <button class="btn btn-ghost" onclick="showView('auth','login')">Sign In</button>
+    <button class="btn btn-outline btn-sm" onclick="openAdminLogin()" style="border-color:var(--accent3);color:var(--accent3);font-weight:600;">🛡️ Admin Login</button>
+    <button class="btn btn-accent" onclick="showView('auth','register')">Get Started</button>
+  </div>
+</nav>
+
+<!-- LANDING -->
+<div id="landing" class="view active">
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-tag"><span class="dot"></span> Database-Driven Vehicle Rental System</div>
+    <h1>Drive Anytime, Anywhere.<br><em>Smart. Reliable. Structured.</em></h1>
+    <p>A full-featured rental platform equipped with location-based vehicle search, real-time availability slots, driver travel records, and mutual driver & vehicle ratings.</p>
+    
+    <div class="role-cards">
+      <div class="role-card user" onclick="showView('auth','register','user')">
+        <div class="role-icon">🙋</div>
+        <h3>Rental Customer</h3>
+        <p>Browse by city/location, view next unavailable slots, request bookings, and review trips.</p>
+        <span class="role-badge">Register as Customer →</span>
+      </div>
+      <div class="role-card driver" onclick="showView('auth','register','driver')">
+        <div class="role-icon">👨‍✈️</div>
+        <h3>Assigned Driver</h3>
+        <p>Access assigned trip schedules, log fuel expenses, report vehicle problems, and track ratings.</p>
+        <span class="role-badge">Driver Portal →</span>
+      </div>
+      <div class="role-card owner" onclick="showView('auth','register','owner')">
+        <div class="role-icon">🚗</div>
+        <h3>Vehicle Owner</h3>
+        <p>List fleet vehicles across hubs, manage drivers, approve requests, and review maintenance.</p>
+        <span class="role-badge">Owner Portal →</span>
+      </div>
+      <div class="role-card admin" onclick="openAdminLogin()">
+        <div class="role-icon">🛡️</div>
+        <h3>Administrator</h3>
+        <p>Monitor system revenue, verify digital payments, oversee users, and generate 3NF reports.</p>
+        <span class="role-badge" style="background:rgba(234,88,12,.15);color:var(--accent3);font-weight:700;">🛡️ Admin Sign In →</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- AUTH -->
+<div id="auth" class="view">
+  <div style="padding:16px 36px;border-bottom:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+    <div class="logo"><span>🚗</span> VRMS<span> Platform</span></div>
+    <button class="btn btn-ghost btn-sm" onclick="showView('landing')">← Back to Home</button>
+  </div>
+
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:30px 16px;">
+    <div class="auth-box">
+      <h2 id="authTitle">Welcome back</h2>
+      <p class="sub" id="authSub">Sign in to your account</p>
+      
+      <div class="tabs">
+        <div class="tab active" id="tabLogin" onclick="switchTab('login')">Sign In</div>
+        <div class="tab" id="tabReg" onclick="switchTab('register')">Register</div>
+      </div>
+
+      <!-- Login Form -->
+      <div id="loginForm">
+        <label style="margin-top:0;">Select Role to Sign In:</label>
+        <div class="role-sel" style="margin-top:6px;margin-bottom:12px;">
+          <div class="role-opt sel" id="lro_user" onclick="selLoginRole('user')">🙋 Customer</div>
+          <div class="role-opt" id="lro_driver" onclick="selLoginRole('driver')">👨‍✈️ Driver</div>
+          <div class="role-opt" id="lro_owner" onclick="selLoginRole('owner')">🚗 Fleet Owner</div>
+          <div class="role-opt" id="lro_admin" onclick="selLoginRole('admin')">🛡️ Admin</div>
+        </div>
+
+        <label>Email Address</label>
+        <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email">
+        <label>Password</label>
+        <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
+        <div id="loginMsg" class="msg"></div>
+        <button class="btn btn-accent btn-full" style="margin-top:20px;" onclick="doLogin()">Sign In</button>
+      </div>
+
+      <!-- Register Form -->
+      <div id="registerForm" style="display:none;">
+        <label>Select Your Role</label>
+        <div class="role-sel" style="grid-template-columns:repeat(3, 1fr);">
+          <div class="role-opt sel" id="ro_user" onclick="selRole('user')">🙋 Customer</div>
+          <div class="role-opt" id="ro_driver" onclick="selRole('driver')">👨‍✈️ Driver</div>
+          <div class="role-opt" id="ro_owner" onclick="selRole('owner')">🚗 Fleet Owner</div>
+        </div>
+        <label>Full Name</label>
+        <input type="text" id="regName" placeholder="e.g. Sadia Rahman">
+        <label>Email Address</label>
+        <input type="email" id="regEmail" placeholder="you@example.com">
+        <label>Phone Number</label>
+        <input type="tel" id="regPhone" placeholder="01712345678">
+        
+        <!-- Driver specific fields -->
+        <div id="driverExtraFields" style="display:none;">
+          <label>Driving License Number</label>
+          <input type="text" id="regLicense" placeholder="DL-DHAKA-XXXXX">
+        </div>
+
+        <label>Password</label>
+        <input type="password" id="regPass" placeholder="At least 6 characters">
+        <label>Confirm Password</label>
+        <input type="password" id="regPassConfirm" placeholder="Re-enter password">
+        <div id="regMsg" class="msg"></div>
+        <button class="btn btn-accent btn-full" style="margin-top:20px;" onclick="doRegister()">Create Account</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="view">
+  <div class="dash-layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="user-avatar" id="sideAvatar">U</div>
+        <div class="name" id="sideName">User</div>
+        <div class="role-label" id="sideRole">Role</div>
+      </div>
+      <div class="nav-items" id="navItems"></div>
+    </aside>
+    <main class="main-content" id="mainContent"></main>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalBox">
+    <h3 id="modalTitle"></h3>
+    <div id="modalBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-accent" id="modalConfirm">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="index.js"></script>
+</body>
+</html>
